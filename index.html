@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset='utf-8' />
+  <title>Packer</title>
+  <link href='css/style.css' rel='stylesheet' type='text/css' media='screen' />
+</head>
+<body>
+  <div id="settings">      
+    <div class='blocks'>
+      <label for='blocks'>Объекты:</label>
+      <textarea id='blocks' rows=12>
+20x40x10
+8x8x64
+16x16x5
+32x48x5
+64x64x4
+128x50x4
+256x128
+</textarea>
+    </div>
+
+    <div class='sort'>
+      <label for='sort'>Сортировка: </label>
+      <select id='sort'>
+        <option>Нет</option>
+        <option>Высота</option>
+        <option>Ширина</option>
+        <option selected>Площадь</option>
+      </select>
+    </div>
+
+        <div class='size'>
+      <label for='size'>Размер контейнера: </label>
+      <select id='size'>
+        <option>300x300</option>
+        <option selected>300x600</option>
+        <option >Авто</option>
+      </select>
+    </div>
+
+    <div id="ratio" class="ratio">
+    </div>
+    <div id = "box" class="box">
+      </div>
+    <div id="nofit" class="nofit">
+    </div>
+
+  </div>
+
+  <div id="packing">
+    <canvas id="canvas">
+    </canvas>
+  </div>
+
+  <script src='js/jquery.js'>        </script>
+  <script src='js/simple.js'>        </script>
+  <script src='js/autogrow.js'></script>
+  <script src='js/demo.js'>          </script>
+
+</body>
+</html>
+
