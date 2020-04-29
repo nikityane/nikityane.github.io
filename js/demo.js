@@ -68,6 +68,7 @@ Demo = {
       else
         nofit.push("" + block.w + "x" + block.h);
     }
+    //Demo.el.sizec.html().toggle(Demo.el.size.val() != 'Авто');
     Demo.el.box.html("Размер<br>контейнера: " + (Demo.el.canvas.width-1) + "х" + (Demo.el.canvas.height - 1)).toggle(Demo.el.size.val() == 'Авто');
     Demo.el.ratio.html("Заполнено: " + Math.round(100 * fit / (w * h)) + "%").toggle(true);
     Demo.el.nofit.html("Не вошло в контейнер (" + nofit.length + ") :<br>" + nofit.join(", ")).toggle(nofit.length > 0);
