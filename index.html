@@ -4,35 +4,45 @@
   <meta charset='utf-8' />
   <title>BinPacker</title>
   <link href='css/style.css' rel='stylesheet' type='text/css' media='screen' />
+  <script type="text/javascript">
+     function readFile(object) {
+  var file = object.files[0];
+  var reader = new FileReader();
+  reader.onload = function() {
+    $('textarea').val(reader.result);
+    $('size').val('reader.result');
+    var text = reader.result.split("\n");
+
+    console.log(text[0]);
+  }
+  reader.readAsText(file)
+}
+  </script>
 </head>
 <body>
   <div id="settings">      
     <div class='blocks'>
       <label for='blocks'>Объекты:</label>
       <textarea id='blocks' rows=12>
-20x40x10
-8x8x64
-16x16x5
-32x48x5
-64x64x4
-128x50x4
-256x128
+16x16
+16x16
 </textarea>
     </div>
-
+    <input type="file" id="file">
+<button onclick="readFile(document.getElementById('file'))">Read!</button>
     <div class='sort'>
       <label for='sort'>Сортировка: </label>
       <select id='sort'>
-        <option>Нет</option>
+        <option selected>Нет</option>
         <option>Высота</option>
         <option>Ширина</option>
-        <option selected>Площадь</option>
+        <option >Площадь</option>
       </select>
     </div>
 
     <div class='size'>
       <label for='size'>Размер контейнера: </label>
-      <input type="text" id='size' size="10" value="Авто">
+      <input type="text" id='size' size="10" value="160x160">
     </div>
 
     <div id="ratio" class="ratio">

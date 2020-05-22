@@ -26,13 +26,17 @@ Demo = {
     });
   },
 
+  timer: function() {
+    console.log(performance.now());
+    
+  },
   //---------------------------------------------------------------------------
 
   run: function() {
 
     var blocks = Demo.blocks.deserialize(Demo.el.blocks.val());
     var packer = Demo.packer();
-
+    Demo.timer();
     Demo.sort.now(blocks);
 
     packer.fit(blocks);
@@ -68,17 +72,18 @@ Demo = {
       else
         nofit.push("" + block.w + "x" + block.h);
     }
-    //Demo.el.sizec.html().toggle(Demo.el.size.val() != 'Авто');
     Demo.el.box.html("Размер<br>контейнера: " + (Demo.el.canvas.width-1) + "х" + (Demo.el.canvas.height - 1)).toggle(Demo.el.size.val() == 'Авто');
     Demo.el.ratio.html("Заполнено: " + Math.round(100 * fit / (w * h)) + "%").toggle(true);
     Demo.el.nofit.html("Не вошло в контейнер (" + nofit.length + ") :<br>" + nofit.join(", ")).toggle(nofit.length > 0);
+    Demo.timer();
   },
 
   //---------------------------------------------------------------------------
 
   sort: {
-    h       : function (a,b) { return b.w - a.w; },
-    w       : function (a,b) { return b.h - a.h; },
+    w       : function (a,b) { return b.w - a.w; },
+    h     : function (a,b) { return b.h - a.h; },
+    a       : function (a,b) { return b.area - a.area; },
     max     : function (a,b) { return Math.max(b.w, b.h) - Math.max(a.w, a.h); },
     min     : function (a,b) { return Math.min(b.w, b.h) - Math.min(a.w, a.h); },
 
@@ -124,10 +129,15 @@ Demo = {
 
     blocks: function(blocks) {
       var n, block;
+      var col = 0;
       for (n = 0 ; n < blocks.length ; n++) {
+        if(col > 1) col = 0;
         block = blocks[n];
-        if (block.fit)
-          Demo.canvas.rect(block.fit.x, block.fit.y, block.w, block.h, Demo.color(n));
+                if (block.fit)
+          Demo.canvas.rect(block.fit.x, block.fit.y, block.w, block.h, Demo.color(n-col));
+        col++;
+
+
       }
     },
     
@@ -136,6 +146,7 @@ Demo = {
         Demo.canvas.stroke(node.x, node.y, node.w, node.h);
         Demo.canvas.boundary(node.down);
         Demo.canvas.boundary(node.right);
+        Demo.canvas.boundary(node.inside);
       }
     }
   },
@@ -143,10 +154,10 @@ Demo = {
   //---------------------------------------------------------------------------
 
   blocks: {
-    change: function() {
-      Demo.el.blocks.val(Demo.blocks.deserialize(Demo.el.blocks.val()));
-      Demo.run();
-    },
+    // change: function() {
+    //   Demo.el.blocks.val(Demo.blocks.deserialize(Demo.el.blocks.val()));
+    //   Demo.run();
+    // },
 
     deserialize: function(val) {
       var i, j, block, blocks = val.split("\n"), result = [];
@@ -154,12 +165,13 @@ Demo = {
         block = blocks[i].split("x");
         if (block.length >= 2)
           result.push({w: parseInt(block[0]), h: parseInt(block[1]), num: (block.length == 2 ? 1 : parseInt(block[2])) });
-      }
+      }console.log(result);
       var expanded = [];
       for(i = 0 ; i < result.length ; i++) {
         for(j = 0 ; j < result[i].num ; j++)
           expanded.push({w: result[i].w, h: result[i].h, area: result[i].w * result[i].h});
       }
+      console.log(expanded);
       return expanded;
     }
   },
@@ -174,6 +186,10 @@ Demo = {
   //---------------------------------------------------------------------------
 
 }
-
+// var time = performance.now();
+// // некий код
+// time = performance.now() - time;
+// console.log('Время выполнения = ', time);
+//Demo.timer();
 $(Demo.init);
 
