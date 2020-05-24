@@ -19,7 +19,7 @@ Demo = {
     Demo.el.blocks.change(Demo.run);
     Demo.el.size.change(Demo.run);
     Demo.el.sort.change(Demo.run);
-    Demo.run();
+    //Demo.run();
     Demo.el.blocks.keypress(function(ev) {
       if (ev.which == 13)
         Demo.run();
@@ -33,11 +33,14 @@ Demo = {
   //---------------------------------------------------------------------------
 
   run: function() {
-
+    // var rand = "";
+    // for(var i = 0; i < 60; i++) 
+    //   rand += '\n'+Math.floor(Math.random() * Math.floor(50)) + 'x' + Math.floor(Math.random() * Math.floor(50));
+    //console.log(rand);
     var blocks = Demo.blocks.deserialize(Demo.el.blocks.val());
     var packer = Demo.packer();
     Demo.timer();
-    Demo.sort.now(blocks);
+    //Demo.sort.now(blocks);
 
     packer.fit(blocks);
 
@@ -81,8 +84,8 @@ Demo = {
   //---------------------------------------------------------------------------
 
   sort: {
-    w       : function (a,b) { return b.w - a.w; },
-    h     : function (a,b) { return b.h - a.h; },
+    h       : function (a,b) { return b.w - a.w; },
+    w     : function (a,b) { return b.h - a.h; },
     a       : function (a,b) { return b.area - a.area; },
     max     : function (a,b) { return Math.max(b.w, b.h) - Math.max(a.w, a.h); },
     min     : function (a,b) { return Math.min(b.w, b.h) - Math.min(a.w, a.h); },
@@ -159,19 +162,61 @@ Demo = {
     //   Demo.run();
     // },
 
-    deserialize: function(val) {
-      var i, j, block, blocks = val.split("\n"), result = [];
-      for(i = 0 ; i < blocks.length ; i++) {
-        block = blocks[i].split("x");
-        if (block.length >= 2)
-          result.push({w: parseInt(block[0]), h: parseInt(block[1]), num: (block.length == 2 ? 1 : parseInt(block[2])) });
-      }console.log(result);
-      var expanded = [];
+    deserialize: function(val) { //16x8r8x8
+      // var i, j, block, blocks = val.split("\n"), result = [];
+      // for(i = 0 ; i < blocks.length ; i++) {
+      //   block = blocks[i].split("x");
+      //   if (block.length >= 2)
+      //     result.push({w: parseInt(block[0]), h: parseInt(block[1]), num: (block.length == 2 ? 1 : parseInt(block[2])) });
+      // }console.log(result);
+      // var expanded = [];
+      // for(i = 0 ; i < result.length ; i++) {
+      //   for(j = 0 ; j < result[i].num ; j++)
+      //     expanded.push({w: result[i].w, h: result[i].h, area: result[i].w * result[i].h});
+      // }
+      // console.log(expanded);
+      // return expanded;
+
+
+      var i, j, k, block, count, blocks, stroke = val.split("\n"), result = [], expanded = [], buff = [], om =[], pices;
+      for(i = 0 ; i < stroke.length ; i++) {
+        count = stroke[i].indexOf("c");
+        //console.log(count);
+        if(count == -1) count = 1;
+        else count = parseInt(stroke[i].slice(stroke[i].indexOf("c")+1));
+        blocks = stroke[i].split("r");
+        pieces = blocks.length;
+        for(j = 0; j < count; j++) {
+          for(k = 0; k < blocks.length; k++) {
+
+            block = blocks[k].split("x");
+            if (block.length >= 2)
+            result.push({w: parseInt(block[0]), h: parseInt(block[1]), pieces: parseInt(pieces)});
+          }
+        }
+      }//console.log(result);
+      
       for(i = 0 ; i < result.length ; i++) {
-        for(j = 0 ; j < result[i].num ; j++)
-          expanded.push({w: result[i].w, h: result[i].h, area: result[i].w * result[i].h});
+        expanded.push({w: result[i].w, h: result[i].h, area: result[i].w * result[i].h, pieces: result[i].pieces});
       }
-      console.log(expanded);
+     // console.log("one: ",expanded);
+      for(i = 0; i < expanded.length; i++) {
+        buff[0] = expanded[i];
+        buff[1] = expanded[i+1];
+        for(j = 0; j < expanded[i].pieces; j++) {
+          buff[j] = expanded[i+j];
+        }
+        Demo.sort.now(buff);
+        for(j = 0; j < expanded[i].pieces; j++) {
+          expanded[i+j] = buff[j];
+        }
+        // expanded[i] = buff[0];
+        // expanded[i+1] = buff[1];
+        i+=(expanded[i].pieces-1);
+        //console.log("mass: ", expanded[i]);
+        //console.log("buff:",buff);
+      }
+      console.log("two: ",expanded);
       return expanded;
     }
   },
