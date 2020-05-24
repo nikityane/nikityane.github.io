@@ -10,10 +10,11 @@
   var reader = new FileReader();
   reader.onload = function() {
     $('textarea').val(reader.result);
-    $('size').val('reader.result');
     var text = reader.result.split("\n");
+    $('size').val(text[0]);
+    
 
-    //console.log(text[0]);
+    console.log(text[0]);
   }
   reader.readAsText(file)
 }

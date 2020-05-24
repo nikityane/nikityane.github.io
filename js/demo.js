@@ -33,10 +33,10 @@ Demo = {
   //---------------------------------------------------------------------------
 
   run: function() {
-    // var rand = "";
-    // for(var i = 0; i < 60; i++) 
-    //   rand += '\n'+Math.floor(Math.random() * Math.floor(50)) + 'x' + Math.floor(Math.random() * Math.floor(50));
-    //console.log(rand);
+    var rand = "";
+    for(var i = 0; i < 10; i++) 
+      rand += '\n'+Math.floor(Math.random() * Math.floor(50)) + 'x' + Math.floor(Math.random() * Math.floor(50)) + 'r' + Math.floor(Math.random() * Math.floor(50)) + 'x' + Math.floor(Math.random() * Math.floor(50));
+    console.log(rand);
     var blocks = Demo.blocks.deserialize(Demo.el.blocks.val());
     var packer = Demo.packer();
     Demo.timer();
